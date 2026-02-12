@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi San Valentín?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Corazones cayendo */
+        .heart {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.7;
+            animation: fall linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Contenedor principal */
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            z-index: 10;
+            position: relative;
+        }
+
+        h1 {
+            color: #00796b;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #81d4fa, #4fc3f7);
+            color: white;
+            position: relative;
+        }
+
+        .btn-no:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+        }
+
+        .btn-si {
+            background: linear-gradient(135deg, #a5d6a7, #81c784);
+            color: white;
+            min-width: 120px;
+        }
+
+        .btn-si:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(129, 199, 132, 0.4);
+        }
+
+        .btn-si:active {
+            transform: scale(0.95);
+        }
+
+        /* Mensaje de respuesta */
+        .message {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff9c4, #fff59d);
+            border-left: 5px solid #fbc02d;
+            border-radius: 10px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message p {
+            color: #f57f17;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .heart-message {
+            font-size: 2em;
+            margin-top: 15px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¿Quieres ser mi San Valentín? 💕</h1>
+        <div class="buttons">
+            <button class="btn-no">No</button>
+            <button class="btn-si">Sí</button>
+        </div>
+        <div class="message">
+            <p>Sabía que aceptarías sin dudarlo, te amo mucho 💕</p>
+            <div class="heart-message">❤️ 💚 💙</div>
+        </div>
+    </div>
+
+    <script>
+        // Crear corazones cayendo
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            
+            const leftPosition = Math.random() * window.innerWidth;
+            const duration = Math.random() * 3 + 3; // 3 a 6 segundos
+            
+            heart.style.left = leftPosition + 'px';
+            heart.style.top = '-30px';
+            heart.style.animation = `fall ${duration}s linear forwards`;
+            
+            document.body.appendChild(heart);
+            
+            // Eliminar el elemento del DOM después de la animación
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        // Crear corazones continuamente
+        setInterval(createHeart, 300);
+
+        // Funcionalidad del botón "No"
+        const btnNo = document.querySelector('.btn-no');
+        let noClickCount = 0;
+
+        btnNo.addEventListener('mouseenter', function(e) {
+            const randomX = Math.random() * 200 - 100;
+            const randomY = Math.random() * 200 - 100;
+            
+            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            noClickCount++;
+        });
+
+        btnNo.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const randomX = Math.random() * 200 - 100;
+            const randomY = Math.random() * 200 - 100;
+            
+            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            noClickCount++;
+        });
+
+        // Funcionalidad del botón "Sí"
+        const btnSi = document.querySelector('.btn-si');
+        const message = document.querySelector('.message');
+
+        btnSi.addEventListener('click', function() {
+            message.classList.add('show');
+            btnNo.style.display = 'none';
+            
+            // Crear más corazones al hacer clic en Sí
+            for (let i = 0; i < 10; i++) {
+                createHeart();
+            }
+        });
+
+        // Para dispositivos táctiles - aumentar sensibilidad del botón No
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            btnNo.addEventListener('click', function(e) {
+                e.preventDefault();
+                const randomX = Math.random() * 200 - 100;
+                const randomY = Math.random() * 200 - 100;
+                
+                this.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                noClickCount++;
+            });
+        }
+    </script>
+</body>
+</html>
