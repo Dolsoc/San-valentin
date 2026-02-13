@@ -139,6 +139,95 @@
             }
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 350px;
+            width: 85%;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.4s ease;
+        }
+
+        .modal-image {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-text {
+            color: #00796b;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal {
+            padding: 10px 25px;
+            font-size: 1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-sigue-no {
+            background: linear-gradient(135deg, #81d4fa, #4fc3f7);
+            color: white;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-segura-si {
+            background: linear-gradient(135deg, #a5d6a7, #81c784);
+            color: white;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .container {
@@ -169,6 +258,17 @@
         </div>
     </div>
 
+    <div class="modal" id="modalSegura">
+        <div class="modal-content">
+            <img src="img/gato.jpg" alt="Gato" class="modal-image">
+            <div class="modal-text">¿Segura? Piénsalo bien 🥺</div>
+            <div class="modal-buttons">
+                <button class="btn-modal btn-sigue-no">Sigue siendo No</button>
+                <button class="btn-modal btn-segura-si">Sí, estoy segura</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Crear corazones cayendo
         function createHeart() {
@@ -196,23 +296,45 @@
 
         // Funcionalidad del botón "No"
         const btnNo = document.querySelector('.btn-no');
+        const modal = document.getElementById('modalSegura');
+        const btnSigueNo = document.querySelector('.btn-sigue-no');
+        const btnSeguraSi = document.querySelector('.btn-segura-si');
         let noClickCount = 0;
 
-        btnNo.addEventListener('mouseenter', function(e) {
+        function moverBoton() {
             const randomX = Math.random() * 200 - 100;
             const randomY = Math.random() * 200 - 100;
             
-            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
             noClickCount++;
-        });
+
+            // Mostrar modal después de 5 clics
+            if (noClickCount === 5) {
+                modal.classList.add('show');
+                noClickCount = 0; // Reset para poder volver a contar
+                
+                // Cerrar modal automáticamente después de 3 segundos
+                setTimeout(() => {
+                    modal.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        btnNo.addEventListener('mouseenter', moverBoton);
 
         btnNo.addEventListener('touchstart', function(e) {
             e.preventDefault();
-            const randomX = Math.random() * 200 - 100;
-            const randomY = Math.random() * 200 - 100;
-            
-            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
-            noClickCount++;
+            moverBoton();
+        });
+
+        // Botón "Sigue siendo No" en el modal - deshabilitado
+        btnSigueNo.addEventListener('click', function(e) {
+            e.preventDefault();
+        });
+
+        // Botón "Sí, estoy segura" en el modal - deshabilitado
+        btnSeguraSi.addEventListener('click', function(e) {
+            e.preventDefault();
         });
 
         // Funcionalidad del botón "Sí"
